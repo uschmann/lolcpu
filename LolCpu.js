@@ -2,11 +2,13 @@ const TAG = '[CPU]';
 
 class LolCpu {
 
-    constructor(memory, registers, opcodes) {
+    constructor(memory, registers, opcodes, flags) {
         this.opcodes = opcodes;
         this.prog = null;
         this.memory = memory;
         this.reg = registers;
+        this.flags = flags;
+
         this.reset();
     }
 
@@ -67,6 +69,18 @@ class LolCpu {
 
     isRunning() {
         return !this.isStopped;
+    }
+
+    getRegister(reg) {
+        return this.reg.getRegister(reg);
+    }
+
+    setFlag(flag, value) {
+        this.flags.getFlag(flag).setValue(value);
+    }
+
+    checkFlag(flag) {
+        return this.flags.getFlag(flag).getValue();
     }
 }
 

@@ -4,4 +4,6 @@ module.exports = {
     'jump': require('./jump'),
 
     'load': require('./load'),
+    'store': require('./store'),
+    'inc': require('./inc'),
 };

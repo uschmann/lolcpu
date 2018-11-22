@@ -2,6 +2,8 @@ const Memory = require('./Memory');
 const LolCpu = require('./LolCpu');
 const RegisterCollection = require('./RegisterCollection');
 const Register = require('./Register');
+const FlagCollection = require('./FlagCollection');
+const Flag = require('./Flag');
 
 const prog = {
     labels: {
@@ -10,15 +12,13 @@ const prog = {
     instructions: [
         { opcode: 'load', params: ['value', 'a', 100] },
         { opcode: 'load', params: ['reg', 'b', 'a'] },
+        { opcode: 'store', params: [0, 'a'] },
         { opcode: 'load', params: ['memory', 'c', 0] },
-        { opcode: 'noop', params: [] },
-        { opcode: 'noop', params: [] },
-        { opcode: 'noop', params: [] },
-        { opcode: 'jump', params: [0] }
+        { opcode: 'inc', params: ['d'] },
+        { opcode: 'jump', params: [0, 'zero'] },
+        { opcode: 'jump', params: [0] },
     ]
 };
-
-
 
 const opcodes = require('./opcodes');
 const registers = new RegisterCollection();
@@ -29,11 +29,14 @@ registers.addRegister('d', new Register());
 registers.addRegister('pc', new Register());
 registers.addRegister('sp', new Register());
 
+const flags = new FlagCollection();
+flags.addFlag('zero', new Flag());
+
 const memory = new Memory(0x100);
 
-const cpu = new LolCpu(memory, registers, opcodes);
+const cpu = new LolCpu(memory, registers, opcodes, flags);
 cpu.loadProgram(prog);
 setInterval(() => {
-    registers.log();
+    //registers.log();
     cpu.step();
-}, 100);
+}, 10);
