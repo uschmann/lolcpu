@@ -6,4 +6,5 @@ module.exports = {
     'load': require('./load'),
     'store': require('./store'),
     'inc': require('./inc'),
+    'dec': require('./dec'),
 };

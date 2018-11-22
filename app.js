@@ -35,8 +35,8 @@ flags.addFlag('zero', new Flag());
 const memory = new Memory(0x100);
 
 const cpu = new LolCpu(memory, registers, opcodes, flags);
-cpu.loadProgram(prog);
+cpu.loadProgram(require('./apps/counter'));
 setInterval(() => {
-    //registers.log();
+    registers.log();
     cpu.step();
-}, 10);
+}, 500);
