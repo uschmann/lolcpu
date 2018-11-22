@@ -1,10 +1,9 @@
-const opcodes = require('./opcodes');
-
 const TAG = '[CPU]';
 
 class LolCpu {
 
-    constructor(memory, registers) {
+    constructor(memory, registers, opcodes) {
+        this.opcodes = opcodes;
         this.prog = null;
         this.memory = memory;
         this.reg = registers;
@@ -13,12 +12,12 @@ class LolCpu {
 
     reset()
     {
-        this.reg.getRegister('pc').setValue(0);
         this.reg.getRegister('sp').setValue(this.memory.getSize() - 1);
-        this.reg.getRegister('a').setValue(0);
-        this.reg.getRegister('b').setValue(0);
-        this.reg.getRegister('c').setValue(0);
-        this.reg.getRegister('d').setValue(0);
+        this.reg.getRegister('pc').reset();
+        this.reg.getRegister('a').reset();
+        this.reg.getRegister('b').reset();
+        this.reg.getRegister('c').reset();
+        this.reg.getRegister('d').reset();
 
         this.memory.reset();
 
@@ -42,7 +41,7 @@ class LolCpu {
             throw new Error('PC out of bound');
         }
         // decode
-        let opcode = opcodes[instruction.opcode];
+        let opcode = this.opcodes[instruction.opcode];
         if(opcode === undefined) {
             throw new Error('Illegal opcode: ' + instruction.opcode);
         }

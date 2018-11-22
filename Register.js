@@ -5,7 +5,7 @@ const TAG = ['Register'];
 class Register {
 
     constructor() {
-        this.value = 0;
+        this.reset();
     }
 
     getValue() {
@@ -16,6 +16,9 @@ class Register {
         this.value = value;
     }
 
+    reset() {
+        this.value = 0;
+    }
 }
 
 module.exports = Register;

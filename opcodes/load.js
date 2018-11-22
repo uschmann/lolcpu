@@ -8,6 +8,9 @@ module.exports = {
             case 'value':
             reg.setValue(params[2]);
             break;
+            case 'memory':
+                reg.setValue(cpu.memory.getValue(params[2]));
+            break;
             default: 
                 throw new Error('[store] Unsupported parameter');
         }
