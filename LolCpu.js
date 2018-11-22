@@ -4,25 +4,21 @@ const TAG = '[CPU]';
 
 class LolCpu {
 
-    constructor(memory) {
+    constructor(memory, registers) {
         this.prog = null;
         this.memory = memory;
+        this.reg = registers;
         this.reset();
     }
 
     reset()
     {
-        this.reg = {
-            pc: 0x00,
-            sp: this.memory.getSize() - 1,
-            a: 0x00,
-            b: 0x00,
-            c: 0x00,
-            d: 0x00,
-            e: 0x00,
-            f: 0x00,
-            g: 0x00,
-        }
+        this.reg.getRegister('pc').setValue(0);
+        this.reg.getRegister('sp').setValue(this.memory.getSize() - 1);
+        this.reg.getRegister('a').setValue(0);
+        this.reg.getRegister('b').setValue(0);
+        this.reg.getRegister('c').setValue(0);
+        this.reg.getRegister('d').setValue(0);
 
         this.memory.reset();
 
@@ -40,7 +36,8 @@ class LolCpu {
         }
         
         // fetch
-        let instruction = this.prog.instructions[this.reg.pc];
+        const pc = this.reg.getRegister('pc');
+        let instruction = this.prog.instructions[pc.getValue()];
         if(instruction === undefined) {
             throw new Error('PC out of bound');
         }
@@ -51,9 +48,9 @@ class LolCpu {
         }
         
         // Log current instruction
-        console.log(TAG + ' ' + this.reg.pc + ' : ' + opcode.dissamble(instruction.params));
+        console.log(TAG + ' ' + pc.getValue() + ' : ' + opcode.dissamble(instruction.params));
 
-        this.reg.pc ++;
+        pc.setValue(pc.getValue() + 1);
         // execute
 
         opcode.exec(this, this.prog, instruction.params);

@@ -1,6 +1,6 @@
 module.exports = {
     exec (cpu, prog, params) {
-        cpu.reg.pc = params[0];
+        cpu.reg.getRegister('pc').setValue(params[0]);
     },
 
     dissamble(params) {
