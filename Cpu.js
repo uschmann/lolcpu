@@ -2,13 +2,12 @@ const TAG = '[CPU]';
 
 class LolCpu {
 
-    constructor(memory, registers, opcodes, flags) {
-        this.opcodes = opcodes;
+    constructor(memory, registers, decoder, flags) {
         this.prog = null;
         this.memory = memory;
         this.reg = registers;
         this.flags = flags;
-
+        this.decoder = decoder;
         this.reset();
     }
 
@@ -28,6 +27,7 @@ class LolCpu {
 
     step()
     {
+        // Do nothing if CPU is stopped.
         if(this.isStopped) {
             return;
         }
@@ -43,17 +43,15 @@ class LolCpu {
             throw new Error('PC out of bound');
         }
         // decode
-        let opcode = this.opcodes[instruction.opcode];
-        if(opcode === undefined) {
-            throw new Error('Illegal opcode: ' + instruction.opcode);
-        }
+        let opcode = this.decoder.fetch(instruction.opcode);
         
-        // Log current instruction
-        console.log(TAG + ' ' + pc.getValue() + ' : ' + opcode.dissamble(instruction.params));
+        // Log the instruction
+        console.log('[CPU] ' + opcode.dissamble(instruction.params));
 
+        // Increment program counter
         pc.setValue(pc.getValue() + 1);
-        // execute
-
+        
+        // execute instruction
         opcode.exec(this, this.prog, instruction.params);
     }
 
@@ -82,6 +80,7 @@ class LolCpu {
     checkFlag(flag) {
         return this.flags.getFlag(flag).getValue();
     }
+    
 }
 
 module.exports = LolCpu;

@@ -1,26 +1,12 @@
-const Memory = require('./Memory');
-const LolCpu = require('./LolCpu');
-const RegisterCollection = require('./RegisterCollection');
-const Register = require('./Register');
-const FlagCollection = require('./FlagCollection');
-const Flag = require('./Flag');
+const Memory = require('./memory/Memory');
+const LolCpu = require('./Cpu');
+const RegisterCollection = require('./register/RegisterCollection');
+const Register = require('./register/Register');
+const FlagCollection = require('./flag/FlagCollection');
+const Flag = require('./flag/Flag');
+const Decoder = require('./Decoder');
 
-const prog = {
-    labels: {
-
-    },
-    instructions: [
-        { opcode: 'load', params: ['value', 'a', 100] },
-        { opcode: 'load', params: ['reg', 'b', 'a'] },
-        { opcode: 'store', params: [0, 'a'] },
-        { opcode: 'load', params: ['memory', 'c', 0] },
-        { opcode: 'inc', params: ['d'] },
-        { opcode: 'jump', params: [0, 'zero'] },
-        { opcode: 'jump', params: [0] },
-    ]
-};
-
-const opcodes = require('./opcodes');
+const decoder = new Decoder(require('./opcodes'));
 const registers = new RegisterCollection();
 registers.addRegister('a', new Register());
 registers.addRegister('b', new Register());
@@ -35,12 +21,20 @@ flags.addFlag('neg', new Flag());
 
 const memory = new Memory(0x100);
 
-const cpu = new LolCpu(memory, registers, opcodes, flags);
+const cpu = new LolCpu(memory, registers, decoder, flags);
 cpu.loadProgram(require('./apps/counter'));
 setInterval(() => {
-    if(cpu.isRunning()) {
+    if(true && cpu.isRunning()) {
        registers.log();
        flags.log();
     }
-    cpu.step();
-}, 500);
+
+    try {
+        cpu.step();
+    }
+    catch(error) {
+        console.log(error);
+        cpu.stop();
+    }
+    
+}, 100);
