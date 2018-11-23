@@ -31,6 +31,7 @@ registers.addRegister('sp', new Register());
 
 const flags = new FlagCollection();
 flags.addFlag('zero', new Flag());
+flags.addFlag('neg', new Flag());
 
 const memory = new Memory(0x100);
 

@@ -19,6 +19,7 @@ module.exports = {
         reg.setValue(reg.getValue() - value);
         
         cpu.setFlag('zero', reg.getValue() == 0);
+        cpu.setFlag('neg', reg.getValue() < 0);
     },
 
     dissamble(params) {
