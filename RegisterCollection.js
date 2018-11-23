@@ -1,6 +1,6 @@
 
 
-const TAG = '[RegisterCollection]';
+const TAG = '[Registers]';
 
 
 class RegisterCollection {
@@ -18,9 +18,11 @@ class RegisterCollection {
     }
 
     log() {
+        let output = '';
         for(let reg in this.registers) {
-            console.log(reg + '\t' + this.getRegister(reg).getValue());
+            output += ` ${reg}: ${this.getRegister(reg).getValue()};`;
         }
+        console.log(output);
     }
 }
 

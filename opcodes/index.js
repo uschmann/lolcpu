@@ -7,4 +7,5 @@ module.exports = {
     'store': require('./store'),
     'inc': require('./inc'),
     'dec': require('./dec'),
+    'sub': require('./sub'),
 };
